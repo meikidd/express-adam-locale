@@ -1,0 +1,5 @@
+<p><%= _i18n_.hello %>, <%= _i18n_.world %>.</p>
+<p>current:<%= _i18n_current_ %>.</p>
+<% for(var i = 0; i < _i18n_supported_.length; i++) { %>
+<a href='/set_locale?lang=<%= _i18n_supported_[i].code %>'>switch to <%= _i18n_supported_[i].lang %></a> 
+<% } %>

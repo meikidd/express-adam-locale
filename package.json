@@ -1,0 +1,15 @@
+{
+  "name": "express-adam-locale",
+  "version": "0.1.0",
+  "description": "Simple Multi Language Middleware for Express.",
+  "main": "index.js",
+  "dependencies": {
+    "debug": "~2.1.1"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/meikidd/express-adam-locale"
+  },
+  "homepage": "https://github.com/meikidd/express-adam-locale"
+}
