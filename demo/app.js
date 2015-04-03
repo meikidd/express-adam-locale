@@ -1,6 +1,6 @@
 var Path = require('path');
 var express = require('express');
-var EAL = require('express-adam-locale');
+var EAL = require('../index');
 var session = require('express-session');
 var app = express();
 
