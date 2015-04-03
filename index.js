@@ -8,11 +8,11 @@
 'use strict';
 
 require('./lib/adam/polyfill/Array');
-const Path = require('path');
-const debug = require('debug')('express-adam-locale');
-const Locale = require('./lib/adam/locale/locale');
+var Path = require('path');
+var debug = require('debug')('express-adam-locale');
+var Locale = require('./lib/adam/locale/locale');
 
-const languageSupported = [{
+var languageSupported = [{
   code:'en-us',
   lang:'English'
 }];
@@ -40,24 +40,27 @@ module.exports = function(opts, app){
   }
   app.eal = eal;
 
-  return function *(next) {
-    this.locals = this.locals || {};
-    if(this.locals._i18n_ || this.locals._i18n_current_ || this.locals._i18n_supported_) {
-        yield next;
+  return function (req, res, next) {
+    res.locals = res.locals || {};
+    if(res.locals._i18n_ || res.locals._i18n_current_ || res.locals._i18n_supported_) {
+        debug('next().');
+        next();
     }
 
-    if(this.path == opts.set_url) {
-      var lang = this.request.query.lang;
-      this.session.eal_i18n_current = lang;
+    if(req.path == opts.set_url) {
+      var lang = req.query.lang;
+      req.session.eal_i18n_current = lang;
       debug('set session.eal_i18n_current:'+lang);
-      this.redirect('back', '/');
+      res.redirect(302, 'back');
     }else {
-      this.locals._i18n_current_ = this.session.eal_i18n_current || opts.default || 'en-us';
-      debug('set locals._i18n_current_:'+this.locals._i18n_current_);
-      this.app.eal.use(this.locals._i18n_current_);
-      this.locals._i18n_ = this.app.eal.get();
-      this.locals._i18n_supported_ = opts.supported;
-      yield next;
+      res.locals._i18n_current_ = req.session.eal_i18n_current || opts.default || 'en-us';
+      debug('set locals._i18n_current_:'+res.locals._i18n_current_);
+      req.app.eal.use(res.locals._i18n_current_);
+      res.locals._i18n_ = req.app.eal.get();
+      res.locals._i18n_supported_ = opts.supported;
+      debug('set locals._i18n_supported_: %o', res.locals._i18n_supported_);
+      next();
     }
+    next();
   }
 }
