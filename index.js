@@ -45,22 +45,22 @@ module.exports = function(opts, app){
     if(res.locals._i18n_ || res.locals._i18n_current_ || res.locals._i18n_supported_) {
         debug('next().');
         next();
-    }
+    }else{
 
-    if(req.path == opts.set_url) {
-      var lang = req.query.lang;
-      req.session.eal_i18n_current = lang;
-      debug('set session.eal_i18n_current:'+lang);
-      res.redirect(302, 'back');
-    }else {
-      res.locals._i18n_current_ = req.session.eal_i18n_current || opts.default || 'en-us';
-      debug('set locals._i18n_current_:'+res.locals._i18n_current_);
-      req.app.eal.use(res.locals._i18n_current_);
-      res.locals._i18n_ = req.app.eal.get();
-      res.locals._i18n_supported_ = opts.supported;
-      debug('set locals._i18n_supported_: %o', res.locals._i18n_supported_);
-      next();
+      if(req.path == opts.set_url) {
+        var lang = req.query.lang;
+        req.session.eal_i18n_current = lang;
+        debug('set session.eal_i18n_current:'+lang);
+        res.redirect(302, 'back');
+      }else {
+        res.locals._i18n_current_ = req.session.eal_i18n_current || opts.default || 'en-us';
+        debug('set locals._i18n_current_:'+res.locals._i18n_current_);
+        req.app.eal.use(res.locals._i18n_current_);
+        res.locals._i18n_ = req.app.eal.get();
+        res.locals._i18n_supported_ = opts.supported;
+        debug('set locals._i18n_supported_: %o', res.locals._i18n_supported_);
+        next();
+      }
     }
-    next();
   }
 }
